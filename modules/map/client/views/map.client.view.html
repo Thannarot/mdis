@@ -1,0 +1,439 @@
+<div class="row" ng-controller="mapCtrl">
+
+	<!-- The Modal for Chart -->
+	<div id="chartModal" class="modal hide">
+		<div class="modal-container">
+			<div class="modal-background"></div>
+			<div class="modal-window ">
+				<div title="close" class="modal-close close-icon pointer">
+					<svg id="shape-close" viewBox="0 0 25 25">
+						<path d="M 5 19 L 19 5 L 21 7 L 7 21 L 5 19 ZM 7 5 L 21 19 L 19 21 L 5 7 L 7 5 Z"></path>
+					</svg>
+				</div>
+				<div class="modal-wrapper custom-scroll">
+					<div class="chart-modal-title">
+						[[chartModalTitle]]
+					</div>
+					<div class="modal-body" id="modal-body"></div>
+				</div>
+			</div>
+		</div>
+	</div>
+
+	<div id="supporterModal" class="modal hide">
+		<div class="modal-container">
+			<div class="modal-background"></div>
+			<div class="modal-window">
+				<!-- <div title="close" class="modal-close close-icon pointer">
+					<svg id="shape-close" viewBox="0 0 25 25">
+						<path d="M 5 19 L 19 5 L 21 7 L 7 21 L 5 19 ZM 7 5 L 21 19 L 19 21 L 5 7 L 7 5 Z"></path>
+					</svg>
+				</div> -->
+				<div class="modal-wrapper custom-scroll">
+					<div class="supporter-modal-title">
+						MYANMAR DROUGHT INFORMATION SYSTEM
+					</div>
+					<div class="supporter-content" id="disclaimer-body">
+						<p><b>VERSION 1.0</b></p>
+						<p>2020</p>
+						<table style="width:80%">
+						  <tr>
+							 <td ng-repeat="partner in partners"  width="33%">
+								  <a href="[[partner.url]]" target="_blank">
+				                  	<img class="grow img-responsive [[partner.className]]" src="[[partner.src]]" alt="[[partner.alt]]">
+				           </a>
+							  </td>
+						  </tr>
+						</table>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+
+
+	<div id="disclaimerModal" class="modal hide">
+		<div class="modal-container">
+			<div class="modal-background"></div>
+			<div class="modal-window">
+				<!-- <div title="close" class="modal-close close-icon pointer">
+					<svg id="shape-close" viewBox="0 0 25 25">
+						<path d="M 5 19 L 19 5 L 21 7 L 7 21 L 5 19 ZM 7 5 L 21 19 L 19 21 L 5 7 L 7 5 Z"></path>
+					</svg>
+				</div> -->
+				<div class="modal-wrapper custom-scroll">
+					<div class="supporter-modal-title">
+						DISCLAIMER
+					</div>
+					<div class="supporter-content" id="disclaimer-body">
+						This product has been created with the highest degree of accuracy possible and depicts information at regional and national scales. Local conditions are subject to variations based on local climatic conditions.
+						The product has been produced based on the latest available satellite and global modeled data and subject to update every two weeks.
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+
+
+	<!-- Alert Container -->
+	<div class="alert alert-dismissible text-center display-none" ng-Class="alertClass" role="alert">
+		<button type="button" class="close" ng-click="closeAlert()" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+		<h5><strong>[[alertContent]]</strong></h5>
+	</div>
+
+	<!-- Map and dependencies -->
+	<div>
+		<!-- Map Container -->
+		<div class="map" ng-class="mapClass" id="map">
+			<div class="control-panel map-component">
+				<div class="scalebar-container"></div>
+				<ul>
+					<li class="zoom-in pointer" id="zoom-in">
+						<svg class="panel-icon">
+							<use xlink:href="#icon-plus">
+								<svg id="icon-plus" viewBox="0 0 1024 1024">
+									<title>Zoom In</title>
+									<path d="M573.44 245.76h-122.88v204.8h-204.8v122.88h204.8v204.8h122.88v-204.8h204.8v-122.88h-204.8v-204.8z" class="path1"></path>
+								</svg>
+							</use>
+						</svg>
+						<span class="tooltipmap top left"> ZOOM IN </span>
+					</li>
+					<li class="zoom-in pointer" id="zoom-out">
+						<svg class="panel-icon">
+							<svg id="icon-minus" viewBox="0 0 1024 1024">
+								<title>Zoom Out</title>
+								<path d="M778.24 573.44h-532.48v-122.88h532.48v122.88z" class="path1"></path>
+							</svg>
+						</svg>
+						<span class="tooltipmap top right"> ZOOM OUT</span>
+					</li>
+					<li class="show-hide pointer" id="legend-toggle">
+						<svg class="panel-icon">
+								<svg id="icon-controlstoggle__on" viewBox="0 0 650 550">
+									<title>Legend</title>
+									<g>
+			                    		<path d="M63.953,164.453H9.135c-2.474,0-4.615,0.9-6.423,2.709C0.903,168.972,0,171.114,0,173.589v54.817
+			                    			c0,2.473,0.903,4.619,2.712,6.424c1.809,1.803,3.949,2.712,6.423,2.712h54.818c2.474,0,4.615-0.905,6.423-2.712
+			                    			c1.809-1.809,2.712-3.951,2.712-6.424v-54.817c0-2.475-0.904-4.617-2.712-6.427C68.568,165.356,66.427,164.453,63.953,164.453z"/>
+			                    		<path d="M63.953,383.722H9.135c-2.474,0-4.615,0.896-6.423,2.707C0.903,388.238,0,390.378,0,392.854v54.82
+			                    			c0,2.471,0.903,4.609,2.712,6.42c1.809,1.813,3.949,2.714,6.423,2.714h54.818c2.474,0,4.615-0.903,6.423-2.714
+			                    			c1.809-1.807,2.712-3.949,2.712-6.42v-54.82c0-2.477-0.904-4.616-2.712-6.426C68.568,384.625,66.427,383.722,63.953,383.722z"/>
+			                    		<path d="M63.953,274.082H9.135c-2.474,0-4.615,0.91-6.423,2.714S0,280.749,0,283.22v54.815c0,2.478,0.903,4.62,2.712,6.427
+			                    			c1.809,1.808,3.949,2.707,6.423,2.707h54.818c2.474,0,4.615-0.896,6.423-2.707c1.809-1.807,2.712-3.949,2.712-6.427V283.22
+			                    			c0-2.471-0.904-4.613-2.712-6.424C68.568,274.989,66.427,274.082,63.953,274.082z"/>
+			                    		<path d="M63.953,54.817H9.135c-2.474,0-4.615,0.903-6.423,2.712S0,61.479,0,63.953v54.817c0,2.475,0.903,4.615,2.712,6.424
+			                    			s3.949,2.712,6.423,2.712h54.818c2.474,0,4.615-0.9,6.423-2.712c1.809-1.809,2.712-3.949,2.712-6.424V63.953
+			                    			c0-2.475-0.904-4.615-2.712-6.424C68.568,55.725,66.427,54.817,63.953,54.817z"/>
+			                    		<path d="M502.49,383.722H118.771c-2.474,0-4.615,0.896-6.423,2.707c-1.809,1.81-2.712,3.949-2.712,6.426v54.82
+			                    			c0,2.471,0.903,4.609,2.712,6.42c1.809,1.813,3.946,2.714,6.423,2.714H502.49c2.478,0,4.616-0.903,6.427-2.714
+			                    			c1.81-1.811,2.71-3.949,2.71-6.42v-54.82c0-2.477-0.903-4.616-2.71-6.426C507.106,384.625,504.967,383.722,502.49,383.722z"/>
+			                    		<path d="M502.49,274.082H118.771c-2.474,0-4.615,0.91-6.423,2.714s-2.712,3.953-2.712,6.424v54.815
+			                    			c0,2.478,0.903,4.62,2.712,6.427c1.809,1.808,3.946,2.707,6.423,2.707H502.49c2.478,0,4.616-0.896,6.427-2.707
+			                    			c1.81-1.807,2.71-3.949,2.71-6.427V283.22c0-2.471-0.903-4.613-2.71-6.424C507.106,274.992,504.967,274.082,502.49,274.082z"/>
+			                    		<path d="M508.917,57.529c-1.811-1.805-3.949-2.712-6.427-2.712H118.771c-2.474,0-4.615,0.903-6.423,2.712
+			                    			s-2.712,3.949-2.712,6.424v54.817c0,2.475,0.903,4.615,2.712,6.424s3.946,2.712,6.423,2.712H502.49c2.478,0,4.616-0.9,6.427-2.712
+			                    			c1.81-1.809,2.71-3.949,2.71-6.424V63.953C511.626,61.479,510.723,59.338,508.917,57.529z"/>
+			                    		<path d="M502.49,164.453H118.771c-2.474,0-4.615,0.9-6.423,2.709c-1.809,1.81-2.712,3.952-2.712,6.427v54.817
+			                    			c0,2.473,0.903,4.615,2.712,6.424c1.809,1.803,3.946,2.712,6.423,2.712H502.49c2.478,0,4.616-0.905,6.427-2.712
+			                    			c1.81-1.809,2.71-3.951,2.71-6.424v-54.817c0-2.475-0.903-4.617-2.71-6.427C507.106,165.356,504.967,164.453,502.49,164.453z"/>
+			                    	</g>
+								</svg>
+						</svg>
+						<span class="tooltipmap middle left"> Legend</span>
+					</li>
+					<li class="timeline-sync pointer" id="time-toggle">
+						<svg class="panel-icon">
+							<svg id="icon-timeline" viewBox="0 0 1024 1024">
+								<title>Time</title>
+								<path d="M512 962.938c-249.046 0-450.938-201.891-450.938-450.938s201.891-450.938 450.938-450.938c249.046 0 450.938 201.891 450.938 450.938s-201.891 450.938-450.938 450.938zM512 872.751c199.238 0 360.751-161.513 360.751-360.751s-161.513-360.75-360.751-360.75c-199.238 0-360.75 161.513-360.75 360.75s161.513 360.751 360.75 360.751zM563.724 510.005c0-22.024-12.056-41.061-29.84-51.416v-187.312c0-16.502-13.34-29.84-29.84-29.84s-29.84 13.339-29.84 29.84v187.312c-17.785 10.355-29.84 29.393-29.84 51.416 0 32.974 26.738 59.682 59.682 59.682 5.371 0 10.444-0.924 15.368-2.238l81.436 81.406c11.668 11.668 30.557 11.668 42.196 0 11.668-11.638 11.668-30.527 0-42.196l-81.495-81.495c1.283-4.864 2.178-9.877 2.178-15.159z" class="path1"></path>
+							</svg>
+						</svg>
+						<span class="tooltipmap middle right"> Time Slider</span>
+					</li>
+					<li class="print pointer" id="upload-file">
+						<svg class="panel-icon">
+								<svg id="icon-print" viewBox="0 0 512 512">
+									<title>Upload File</title>
+									<g>
+										<g>
+											<path d="M495.658,202.79H16.342c-9.628,0-17.18,8.297-16.267,17.892l18.754,196.643c0.801,8.386,7.844,14.789,16.267,14.789
+												h441.806c8.423,0,15.467-6.403,16.267-14.788l18.755-196.644C512.837,211.096,505.296,202.79,495.658,202.79z"/>
+										</g>
+									</g>
+									<g>
+										<g>
+											<path d="M464.932,116.758H233.457v-20.53c0-9.024-7.316-16.34-16.34-16.34H47.164c-9.024,0-16.34,7.316-16.34,16.34v73.88h450.448
+												v-37.01C481.272,124.074,473.956,116.758,464.932,116.758z"/>
+										</g>
+									</g>
+								</svg>
+						</svg>
+						<span class="tooltipmap low-mid left">Upload File</span>
+					</li>
+					<li class="draw pointer" id="draw-tool">
+						<svg class="panel-icon">
+							<use xlink:href="#icon-analysis-draw">
+								<svg id="icon-analysis-draw" viewBox="0 0 1240 1024">
+									<title>Drawing</title>
+									<path d="M955.715 836.285c0 10.402 1.886 20.318 5.282 29.534 12.019 32.552 43.331 55.835 80.034 55.835 47.104 0 85.315-38.211 85.315-85.315 0-32.984-18.701-61.548-46.080-75.776l88.226-283.163c3.018 0.323 5.982 0.539 9.054 0.539 47.104 0 85.315-38.211 85.315-85.315s-38.211-85.315-85.315-85.315c-47.104 0-85.315 38.211-85.315 85.315 0 31.96 17.516 59.769 43.547 74.429l-88.387 284.187-6.306-0.162c-45.811 0-83.052 36.163-85.154 81.435l-0.162 3.934zM1036.827 785.246l4.258-0.162c10.725 0 20.642 3.234 28.834 8.893 13.528 9.216 22.366 24.684 22.366 42.307 0 28.295-22.905 51.2-51.2 51.2-19.564 0-36.595-10.995-45.218-27.109-3.827-7.168-5.982-15.36-5.982-24.037 0-3.288 0.269-6.413 0.862-9.539 4.204-22.366 23.013-39.559 46.080-41.499zM1178.947 443.715h-1.347c-11.749 0-22.582-3.934-31.205-10.563-12.18-9.378-19.941-24.091-19.941-40.637 0-28.295 22.905-51.2 51.2-51.2s51.2 22.905 51.2 51.2c0 27.81-22.205 50.445-49.853 51.2zM392.515 1024c45.757 0 83.052-35.948 85.154-81.219l0.162-4.096c0-10.402-1.886-20.318-5.282-29.534-12.019-32.552-43.331-55.781-80.034-55.781-18.863 0-36.379 6.036-50.499 16.384l-183.134-160.93c7.491-12.665 11.803-27.379 11.803-43.17 0-13.528-3.072-26.355-8.731-37.726l748.706-484.19c15.522 16.546 37.619 26.947 62.141 26.947 47.104 0 85.315-38.211 85.315-85.315s-38.211-85.315-85.315-85.315c-47.104 0-85.315 38.211-85.315 85.315 0 10.348 1.94 20.157 5.282 29.373l-751.778 486.238c-14.929-12.881-34.331-20.642-55.619-20.642-47.104 0-85.315 38.211-85.315 85.315s38.211 85.315 85.315 85.315c18.971 0 36.487-6.252 50.661-16.707l183.134 160.768c-7.599 12.773-11.965 27.756-11.965 43.709 0 47.104 38.211 85.315 85.315 85.315zM940.032 124.766c-8.839-7.33-15.091-17.677-17.408-29.373-0.647-3.288-1.024-6.629-1.024-10.078 0-28.295 22.905-51.2 51.2-51.2s51.2 22.905 51.2 51.2c0 28.295-22.905 51.2-51.2 51.2-12.45 0-23.875-4.365-32.768-11.803zM132.419 685.541c-4.581 10.833-12.719 19.779-23.013 25.277-7.168 3.827-15.36 5.982-24.091 5.982-28.295 0-51.2-22.905-51.2-51.2s22.905-51.2 51.2-51.2c9 0 17.57 2.425 24.899 6.467 10.294 5.713 18.324 14.767 22.69 25.762 2.371 5.875 3.611 12.234 3.611 18.917 0 7.114-1.509 13.797-4.096 19.941zM345.627 918.205c4.689-10.725 12.935-19.51 23.229-24.899 7.114-3.719 15.144-5.821 23.714-5.821 19.564 0 36.595 11.048 45.218 27.109 3.827 7.168 5.982 15.36 5.982 24.091 0 3.288-0.269 6.467-0.862 9.539-4.419 23.768-25.331 41.661-50.338 41.661-28.295 0-51.2-22.905-51.2-51.2 0-7.276 1.563-14.228 4.258-20.48zM477.723 942.781l483.328-76.962c-3.395-9.216-5.282-19.133-5.282-29.534l0.162-3.934-483.328 76.8c3.395 9.216 5.282 19.133 5.282 29.534l-0.162 4.096z" class="path1"></path>
+								</svg>
+							</use>
+						</svg>
+						<span class="tooltipmap low-mid right"> Drawing</span>
+					</li>
+
+				</ul>
+			</div>
+
+		</div>
+
+		<div class="map-panel__toggle">
+
+
+		<div id="toggle_drought_box" class="map-panel__toggle--panel shadow" style="display: block;">
+			<!-- <div class="title">
+				CAMBODIA DROUGHT INFORMATION
+			</div> -->
+
+			<span id="toggle_disclaimer" style="float: right;" data-target="layers">
+				<svg stroke="rgb(247, 145, 29)" fill="rgb(247, 145, 29)" stroke-width="0" viewBox="0 0 350 350" height="1.5em" width="1.5em"  xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+					<g>
+						<g>
+							<path d="M165,0C74.019,0,0,74.02,0,165.001C0,255.982,74.019,330,165,330s165-74.018,165-164.999C330,74.02,255.981,0,165,0z
+								 M165,300c-74.44,0-135-60.56-135-134.999C30,90.562,90.56,30,165,30s135,60.562,135,135.001C300,239.44,239.439,300,165,300z"/>
+							<path d="M164.998,70c-11.026,0-19.996,8.976-19.996,20.009c0,11.023,8.97,19.991,19.996,19.991
+								c11.026,0,19.996-8.968,19.996-19.991C184.994,78.976,176.024,70,164.998,70z"/>
+							<path d="M165,140c-8.284,0-15,6.716-15,15v90c0,8.284,6.716,15,15,15c8.284,0,15-6.716,15-15v-90C180,146.716,173.284,140,165,140z
+								"/>
+						</g>
+					</g>
+				</svg>
+			</span>
+			<br>
+
+			<div class="layer-category">
+				<div id="caret-area"  class="layer-category-label-container pointer">
+					<div class="layer-category-label">
+						Area
+					</div>
+					<span class="layer-category-caret">▼</span>
+				</div>
+				<div id="content-area" class="layer-category-content">
+					<div class="layer-checkbox relative active">
+						<div class="form-group">
+							<label for="area-filter" class="js-tooltip"
+								   title="Allows to select the desired area for generating the drought related information" translate>
+								Defind Area
+							</label>
+							<select name="area-filter" class="form-control"
+									id="area-filter" ng-options="option.name | translate for option in areaFilter.options"
+									ng-model="areaFilter.value"
+									ng-change="adminAreaChange(areaFilter.value)"></select>
+						</div>
+
+						<div class="form-group" ng-show="showAreaFilterSlider">
+							<label for="areaFilterSlider">Area Filter Opacity</label>
+							<input id="areaFilterSlider" data-slider-id="areaFilterSlider" type="text"
+								   data-slider-min="0" data-slider-max="1" data-slider-step="0.1"
+								   data-slider-value="0.1">
+								   <span> value: </span><span id="opacity-area-val">10</span><span>%</span>
+						</div>
+
+
+					</div>
+				</div>
+			</div>
+
+			<div class="layer-category">
+				<div id="caret-dataset" class="layer-category-label-container pointer">
+					<div class="layer-category-label">
+						Dataset
+					</div>
+					<span class="layer-category-caret">▼</span>
+				</div>
+				<div id="content-dataset" class="layer-category-content">
+					<div class="layer-checkbox relative active">
+						<div class="form-group">
+							<label for="index-filter" class="js-tooltip"
+								   title="Allows to select the category of variables which is needed to visualize" translate>
+								SELECT_INDEX
+							</label>
+							<select name="index-filter" class="form-control"
+									ng-options="option.name | translate for option in indexSelectors | orderBy:'name'"
+									ng-model="indexSelector"
+									ng-change="populateVariableOptions(indexSelector)">
+							</select>
+						</div>
+						<div class="form-group" id="indexOptions">
+							<label for="variable-filter" class="js-tooltip"
+								   title="Select the required variable to visualize" translate>
+								   SELECT_VARIABLE
+							</label>
+							<select name="variable-filter" class="form-control"
+									ng-options="option.name | translate for option in indexOptions | orderBy:'name'"
+									ng-model="indexOption.option">
+							</select>
+						</div>
+						<!-- Slider Container -->
+						<div class="opacity-slider leaflet-right" ng-show="showOpacitySlider">
+							<div class="leaflet-control">
+								<div class="form-group float-left" style="margin-top:-20px; width:300px;">
+									<label for="areaFilterSlider">Opacity</label>
+									<div class="col-9">
+
+									</div>
+									<input id="opacitySlider" data-slider-id="opacitySlider" type="text" data-slider-min="0" data-slider-max="1" data-slider-step="0.1" class="opacity-slider">
+									<span> value: </span><span id="opacity-val">100</span><span>%</span>
+								</div>
+							</div>
+						</div>
+						<div class="display-inline-block col-md-4" id="timeOptions" ng-repeat="option in timeOptions">
+							<label name="time-filter" class="radio-inline">
+								<input type="radio" id="option.value" name="time-filter" ng-value="option.value"
+										 ng-model="timeOptionSelector" ng-checked="option.checked"
+										 ng-click="changeTimeOptionSelector(timeOptionSelector)">[[option.name]]
+							</label>
+						</div>
+						<div class="panel-footer">
+							<div class="row text-center">
+								<button id="btn-update-map" type="button" class="btn btn-primary-orange" ng-click="updateMap()">
+									<span class="glyphicon glyphicon-th" aria-hidden="true"></span> <span translate>SHOW_IN_MAP</span>
+								</button>
+								<button id="btn-show-chart" type="button" class="btn btn-primary-orange" ng-click="showChart()">
+									<span class="glyphicon glyphicon-stats" aria-hidden="true"></span> <span translate>SHOW_CHART</span>
+								</button>
+							</div>
+							<br>
+							<div class="row text-center">
+								<div class="btn-group" ng-show="showDownloadButton">
+									<button id="btn-download" type="button" class="btn btn-primary-blue">
+										<span class="glyphicon glyphicon-download-alt" aria-hidden="true"></span> Download
+									</button>
+									<button type="button" class="btn btn-primary-blue dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+										<span class="caret"></span>
+										<span class="sr-only">Toggle Dropdown</span>
+									</button>
+									<ul class="dropdown-menu">
+										<li><a href="" target="_blank" class="download-btn" ng-click="downloadRaster()">Download Raster</a></li>
+										<li><a href="" ng-click="downloadVector()">Download Vector</a></li>
+									</ul>
+								</div>
+								<!--<button type="button" class="btn btn-primary-orange">
+									<span class="glyphicon glyphicon-print" aria-hidden="true"></span> Print Map
+								</button>-->
+							</div>
+						</div>
+
+					</div>
+				</div>
+			</div>
+
+
+
+
+
+
+
+
+		</div>
+
+	</div>
+
+		<!-- Legend Container -->
+		<div id="toggle_legend_box" class="map-panel__toggle--panel--legendbox " ng-show="showLegend">
+			<!-- <div class="title">
+				LEGEND
+			</div> -->
+			<p><b>[[legendParameter | translate]] <br /></b></p>
+			<p>[[legendDate]]</p>
+		</div>
+
+
+		<div id="loader" class="loader" ng-show="showLoader">
+			<div class="loading-img"></div>
+		</div>
+
+		<div class="sliderContainer" ng-show="showTimeSlider">
+			<div id="datePickerSlider" class="datePickerSlider" name="datePickerSlider" />
+			<button type="button" class="btn btn-default slide-forward" title="move the slider by 1 day forward" ng-click="slideForward()">
+				<span class="glyphicon glyphicon-forward" aria-hidden="true" style="left: 2px;"></span>
+			</button>
+			<button type="button" class="btn btn-default slide-backward" title="move the slider by 1 day backward" ng-click="slideBackward()">
+				<span class="glyphicon glyphicon-backward" aria-hidden="true" style="right: 2px;"></span>
+			</button>
+		</div>
+
+		<div id="drawing-modal" class="modal hide">
+			<div class="modal-container">
+				<div class="modal-background"></div>
+				<div class="modal-window ">
+					<!-- <div title="close" class="modal-close close-icon pointer">
+						<svg id="shape-close" viewBox="0 0 25 25">
+							<path d="M 5 19 L 19 5 L 21 7 L 7 21 L 5 19 ZM 7 5 L 21 19 L 19 21 L 5 7 L 7 5 Z"></path>
+						</svg>
+					</div> -->
+					<div class="modal-wrapper custom-scroll">
+						<div class="chart-modal-title">
+							Define Area
+						</div>
+						<div class="disclaimer-content">
+							Click on drawn shapes on the map to subscribe to the area.<br>
+							<button class="btn btn-default btn-sm btn-drawtool" id="draw-polygon">
+								<svg stroke="rgb(240, 171, 0)" fill="rgb(240, 171, 0)" viewBox="0 0 700 700" fillColorqxmlns="http://www.w3.org/2000/svg">
+								    <path d="m497.027344 209.589844h-9.8125l-69.691406-119.765625h9.640624c8.269532 0 14.972657-6.703125 14.972657-14.96875v-59.882813c0-8.269531-6.703125-14.972656-14.972657-14.972656h-59.882812c-8.265625 0-14.96875 6.703125-14.96875 14.972656v16.253906h-192.625v-16.253906c0-8.269531-6.703125-14.972656-14.96875-14.972656h-59.882812c-8.269532 0-14.972657 6.703125-14.972657 14.972656v59.882813c0 8.265625 6.703125 14.96875 14.972657 14.96875h7.925781l-69.148438 119.765625h-8.640625c-8.269531 0-14.972656 6.703125-14.972656 14.972656v59.882812c0 8.265626 6.703125 14.96875 14.972656 14.96875h8.640625l70.300781 121.761719h-9.078124c-8.269532 0-14.972657 6.703125-14.972657 14.972657v59.882812c0 8.269531 6.703125 14.96875 14.972657 14.96875h59.882812c8.265625 0 14.96875-6.699219 14.96875-14.96875v-18.253906h192.625v18.253906c0 8.269531 6.703125 14.96875 14.96875 14.96875h59.882812c8.269532 0 14.972657-6.699219 14.972657-14.96875v-59.882812c0-8.269532-6.703125-14.972657-14.972657-14.972657h-10.074218l70.296875-121.761719h9.640625c8.269531 0 14.972656-6.703124 14.972656-14.96875v-59.882812c0-8.269531-6.703125-14.972656-14.972656-14.972656zm-14.96875 29.941406v29.941406h-29.941406v-29.941406zm-99.804688-209.589844h29.941406v29.941406h-29.941406zm-282.449218 0h29.941406v29.941406h-29.941406zm-69.863282 239.53125v-29.941406h29.941406v29.941406zm99.804688 211.585938h-29.941406v-29.941406h29.941406zm282.449218 0h-29.941406v-29.941406h29.941406zm-29.679687-59.882813h-15.234375c-8.265625 0-14.96875 6.703125-14.96875 14.972657v11.6875h-192.625v-11.6875c0-8.269532-6.703125-14.972657-14.96875-14.972657h-16.230469l-70.300781-121.761719h16.667969c8.265625 0 14.96875-6.703124 14.96875-14.96875v-59.882812c0-8.269531-6.703125-14.972656-14.96875-14.972656h-16.667969l69.148438-119.765625h17.382812c8.265625 0 14.96875-6.703125 14.96875-14.96875v-13.6875h192.625v13.6875c0 8.265625 6.703125 14.96875 14.96875 14.96875h15.597656l69.695313 119.765625h-15.429688c-8.265625 0-14.96875 6.703125-14.96875 14.972656v59.882812c0 8.265626 6.703125 14.96875 14.96875 14.96875h15.671875zm0 0"/>
+								</svg>
+								<p style="margin: 0 0 0px;">Polygon</p>
+							</button>
+							<button class="btn btn-default btn-sm btn-drawtool" id="draw-rectangle">
+								<svg stroke="rgb(240, 171, 0)" fill="rgb(240, 171, 0)" viewBox="0 0 700 700" xmlns="http://www.w3.org/2000/svg">
+								    <path d="m482 90h15c8.285156 0 15-6.714844 15-15v-60c0-8.285156-6.714844-15-15-15h-60c-8.285156 0-15 6.714844-15 15v15h-332v-15c0-8.285156-6.714844-15-15-15h-60c-8.285156 0-15 6.714844-15 15v60c0 8.285156 6.714844 15 15 15h15v331c0 .339844.027344.667969.050781 1h-15.050781c-8.285156 0-15 6.714844-15 15v60c0 8.285156 6.714844 15 15 15h60c8.285156 0 15-6.714844 15-15v-15h331c.335938 0 .667969-.027344 1-.050781v15.050781c0 8.285156 6.714844 15 15 15h60c8.285156 0 15-6.714844 15-15v-60c0-8.285156-6.714844-15-15-15h-15.050781c.023437-.332031.050781-.660156.050781-1zm-30-60h30v30h-30zm-422 0h30v30h-30zm30 452h-30v-30h30zm422 0h-30v-30h30zm-45-60c-8.285156 0-15 6.714844-15 15v15.050781c-.332031-.023437-.660156-.050781-1-.050781h-331v-15c0-8.285156-6.714844-15-15-15h-15.050781c.023437-.332031.050781-.660156.050781-1v-331h15c8.285156 0 15-6.714844 15-15v-15h332v15c0 8.285156 6.714844 15 15 15h15v331c0 .339844.027344.667969.050781 1zm0 0"/>
+								</svg>
+								<p style="margin: 0 0 0px;">Rectangle</p>
+							</button>
+							<!-- <button class="btn btn-default btn-sm btn-drawtool" id="draw-edit">
+								<svg stroke="rgb(240, 171, 0)" fill="rgb(240, 171, 0)" viewBox="0 0 550 550" xmlns="http://www.w3.org/2000/svg">
+									<path d="m370.589844 250.972656c-5.523438 0-10 4.476563-10 10v88.789063c-.019532 16.5625-13.4375 29.984375-30 30h-280.589844c-16.5625-.015625-29.980469-13.4375-30-30v-260.589844c.019531-16.558594 13.4375-29.980469 30-30h88.789062c5.523438 0 10-4.476563 10-10 0-5.519531-4.476562-10-10-10h-88.789062c-27.601562.03125-49.96875 22.398437-50 50v260.59375c.03125 27.601563 22.398438 49.96875 50 50h280.589844c27.601562-.03125 49.96875-22.398437 50-50v-88.792969c0-5.523437-4.476563-10-10-10zm0 0"/>
+								    <path d="m376.628906 13.441406c-17.574218-17.574218-46.066406-17.574218-63.640625 0l-178.40625 178.40625c-1.222656 1.222656-2.105469 2.738282-2.566406 4.402344l-23.460937 84.699219c-.964844 3.472656.015624 7.191406 2.5625 9.742187 2.550781 2.546875 6.269531 3.527344 9.742187 2.566406l84.699219-23.464843c1.664062-.460938 3.179687-1.34375 4.402344-2.566407l178.402343-178.410156c17.546875-17.585937 17.546875-46.054687 0-63.640625zm-220.257812 184.90625 146.011718-146.015625 47.089844 47.089844-146.015625 146.015625zm-9.40625 18.875 37.621094 37.625-52.039063 14.417969zm227.257812-142.546875-10.605468 10.605469-47.09375-47.09375 10.609374-10.605469c9.761719-9.761719 25.589844-9.761719 35.351563 0l11.738281 11.734375c9.746094 9.773438 9.746094 25.589844 0 35.359375zm0 0"/>
+								</svg>
+								<p style="margin: 0 0 0px;">Edit</p>
+							</button> -->
+							<button class="btn btn-default btn-sm btn-drawtool" id="draw-clear">
+								<svg stroke="rgb(240, 171, 0)" fill="rgb(240, 171, 0)" viewBox="0 0 75 75" xmlns="http://www.w3.org/2000/svg">
+									<g>
+										<g>
+											<path d="M40.149,12.335H15.914c-2.02,0-3.661,1.653-3.661,3.694l1.653,36.37c0,2.021,1.644,3.662,3.662,3.662h20.926
+												c2.021,0,3.662-1.632,3.662-3.63l1.653-36.436C43.811,13.979,42.166,12.335,40.149,12.335z M38.492,52.447l-20.971-0.078
+												l-1.654-36.372c0-0.024,0.021-0.046,0.047-0.046l24.28,0.014L38.492,52.447z"/>
+											<path d="M28.05,50.393c1.069,0,1.94-0.87,1.94-1.939V22.23c0-1.068-0.869-1.938-1.94-1.938c-1.068,0-1.938,0.87-1.938,1.938
+												v26.223C26.113,49.522,26.981,50.393,28.05,50.393z"/>
+											<path d="M35.069,50.392h0.02c1.059,0,1.93-0.859,1.941-1.918l0.299-26.22c0.006-0.519-0.189-1.007-0.553-1.378
+												c-0.364-0.371-0.846-0.578-1.387-0.584c-1.06,0-1.929,0.859-1.939,1.917l-0.301,26.22C33.139,49.499,33.998,50.38,35.069,50.392z"
+												/>
+											<path d="M20.972,50.392h0.02c1.07-0.013,1.931-0.894,1.918-1.963l-0.299-26.22c-0.012-1.058-0.883-1.917-1.961-1.917
+												c-0.52,0.006-1.004,0.213-1.367,0.584c-0.362,0.371-0.557,0.859-0.551,1.378l0.299,26.22
+												C19.042,49.532,19.914,50.392,20.972,50.392z"/>
+											<path d="M14.707,10.91l27.086-1.562c0.468-0.026,0.896-0.233,1.209-0.585c0.312-0.35,0.47-0.8,0.438-1.266
+												c-0.053-0.929-0.819-1.653-1.75-1.653L14.604,7.406c-0.467,0.026-0.896,0.233-1.207,0.585c-0.312,0.35-0.471,0.8-0.44,1.267
+												C13.006,10.184,13.776,10.91,14.707,10.91z M14.707,10.396C14.707,10.396,14.707,10.397,14.707,10.396v0.014V10.396z"/>
+											<path d="M23.854,6.294l0.104-0.003c0.481-0.027,0.926-0.241,1.245-0.603c0.322-0.36,0.484-0.824,0.455-1.307l0.021-0.49
+												l4.833-0.232l0.025,0.44c0.057,0.956,0.848,1.704,1.803,1.704L32.446,5.8c0.482-0.028,0.926-0.242,1.246-0.603
+												c0.322-0.36,0.481-0.825,0.455-1.308l-0.025-0.439c-0.115-2.007-1.848-3.553-3.865-3.445L25.47,0.281
+												c-2.017,0.115-3.562,1.852-3.443,3.866l0.025,0.441C22.106,5.546,22.897,6.294,23.854,6.294z M23.854,5.783L23.854,5.783v0.013
+												V5.783z"/>
+										</g>
+									</g>
+								</svg>
+								<p style="margin: 0 0 0px;">Clear</p>
+							</button>
+
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+
+
+	</div>
+
+</div>
