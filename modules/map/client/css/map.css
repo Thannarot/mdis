@@ -502,7 +502,7 @@ button>svg{
 
 .map-panel__toggle--panel--legendbox {
 	overflow: auto;
-	background-color: rgba(0,0,0,.25);
+	background-color: rgba(0,0,0,.4);
 	padding: 10px;
 	width: 170px;
 	color: #f9f9f9;

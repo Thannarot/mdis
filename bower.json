@@ -9,7 +9,7 @@
     "type": "git",
     "url": "https://github.com/Servir-Mekong/Drought-And-Crop-Yield"
   },
-  "homepage": "https://rdcyis-servir.adpc.net/",
+  "homepage": "https://mdis-fao.adpc.net/",
   "ignore": [
     "**/.*",
     "node_modules",
