@@ -526,10 +526,10 @@
 		map.createPane('streamLayer');
 		map.createPane('admin');
 		map.createPane('indexLayer');
-		map.getPane('admin').style.zIndex = 650;
-		map.getPane('indexLayer').style.zIndex = 660;
-		map.getPane('waterLayer').style.zIndex = 670;
-		map.getPane('streamLayer').style.zIndex = 665;
+		map.getPane('admin').style.zIndex = 250;
+		map.getPane('indexLayer').style.zIndex = 260;
+		map.getPane('waterLayer').style.zIndex = 270;
+		map.getPane('streamLayer').style.zIndex = 265;
 
 		//var layer = L.esri.basemapLayer('Topographic').addTo(map);
 
@@ -1178,6 +1178,7 @@
 						} else if (["admin1", "admin2"].indexOf($scope.selectedLayerData.from) > -1) {
 							scope = $scope.selectedLayerData.country.charAt(0).toUpperCase() + $scope.selectedLayerData.country.slice(1);
 						}
+
 						$scope.createGraph(seriesOptions, scope);
 
 						// Show Model
@@ -1187,6 +1188,8 @@
 						$scope.showLoader = false;
 
 						$scope.closeAlert();
+
+
 					},
 					function () {
 						// Error Callback
@@ -1535,7 +1538,7 @@
 			$("#supporterModal").addClass('modal show');
 		});
 
-		$(".modal").click(function() {
+		$(".modal-background").click(function() {
 			$(".modal").removeClass('show');
 			$(".modal").addClass('hide');
 		});

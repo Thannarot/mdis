@@ -1,9 +1,9 @@
 {
-  "name": "RDCYIS",
-  "description": "Regional Drought and Crop Yield Information System",
+  "name": "MDIS",
+  "description": "Myanmar Drought Information System",
   "private": false,
   "authors": [
-    "Biplov Bhandari (bionicbiplov45@gmail.com)"
+    "Thannarot Kunlamai (thannarot.kunlamai@adpc.net)"
   ],
   "repository": {
     "type": "git",

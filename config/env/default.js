@@ -7,7 +7,7 @@ module.exports = {
 		keywords: 'Myanmar, Drought, Drought Tool, ADPC, FAO, Myanmar Drought Information System, Ministry of Agriculture Livestock and Irrigation, MOALI',
 		googleAnalyticsTrackingID: process.env.GOOGLE_ANALYTICS_TRACKING_ID || 'GOOGLE_ANALYTICS_TRACKING_ID'
 	},
-	port: process.env.PORT || 3000,
+	port: process.env.PORT || 8000,
 	host: process.env.HOST || '0.0.0.0',
 	templateEngine: 'swig',
 	// Session Cookie settings
