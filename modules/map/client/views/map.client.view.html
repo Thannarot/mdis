@@ -110,7 +110,7 @@
 					</li>
 					<li class="show-hide pointer" id="legend-toggle">
 						<svg class="panel-icon">
-								<svg id="icon-controlstoggle__on" viewBox="0 0 650 550">
+								<svg id="icon-controlstoggle__on" viewBox="-55 -55 650 650">
 									<title>Legend</title>
 									<g>
 			                    		<path d="M63.953,164.453H9.135c-2.474,0-4.615,0.9-6.423,2.709C0.903,168.972,0,171.114,0,173.589v54.817
@@ -153,7 +153,7 @@
 					</li>
 					<li class="print pointer" id="upload-file">
 						<svg class="panel-icon">
-								<svg id="icon-print" viewBox="0 0 512 512">
+								<svg id="icon-print" viewBox="-50 -50 600 600">
 									<title>Upload File</title>
 									<g>
 										<g>
@@ -358,6 +358,9 @@
 			<div id="datePickerSlider" class="datePickerSlider" name="datePickerSlider"></div>
 			<button type="button" class="btn btn-default slide-forward" title="move the slider by 1 day forward" ng-click="slideForward()">
 				<span class="glyphicon glyphicon-forward" aria-hidden="true" style="left: 2px;"></span>
+			</button>
+			<button type="button" class="btn btn-default slide-backward" title="Today" ng-click="setSliderToday()">
+				<span class="glyphicon glyphicon-calendar" aria-hidden="true" ></span>
 			</button>
 			<button type="button" class="btn btn-default slide-backward" title="move the slider by 1 day backward" ng-click="slideBackward()">
 				<span class="glyphicon glyphicon-backward" aria-hidden="true" style="right: 2px;"></span>

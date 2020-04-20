@@ -417,6 +417,20 @@
 			}, 500);
 		};
 
+		// Backward Slider
+		$scope.setSliderToday = function () {
+			var date = new Date();
+			$scope.selectedDate = [
+				date.getFullYear(), ((date.getMonth() + 1) > 9 ? '' : '0') + (date.getMonth() + 1) , ((date.getDate()) > 9 ? '' : '0') + (date.getDate())
+			].join('-');
+			tooltipInput.value = $scope.selectedDate;
+			timeSlider.noUiSlider.set(new Date($scope.selectedDate).getTime());
+			$timeout(function () {
+				$scope.changeTimeSlider();
+			}, 500);
+		};
+
+
 		// Toogle TimeSlider control
 		L.Control.ToogleTimeSlider = L.Control.extend({
 			options: {

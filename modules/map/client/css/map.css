@@ -3,7 +3,7 @@ label {
     max-width: 100%;
     margin-bottom: 5px;
     font-weight: 500;
-    font-size: 14px;
+    font-size: 12px;
 }
 
 /* width */
@@ -35,7 +35,7 @@ label {
     font-weight: 400;
     vertical-align: middle;
     cursor: pointer;
-    font-size: 14px;
+    font-size: 12px;
 }
 
 .map {
@@ -238,7 +238,7 @@ label {
 	text-align: left;
 	line-height: 2.5vh;
 	color: rgb(85, 85, 85);
-	width: 150px;
+	width: 130px;
 }
 
 .legend-leaflet i {
@@ -323,7 +323,7 @@ label {
 
 .control-panel {
     top: 10px;
-    right: 60px;
+    right: 45px;
     width: auto;
 }
 
@@ -353,8 +353,8 @@ ul {
     box-sizing: border-box;
     display: -webkit-box;
     display: -ms-flexbox;
-    height: 38px;
-    width: 38px;
+    height: 30px;
+    width: 30px;
 		margin-right: 10px;
 }
 
@@ -458,14 +458,14 @@ ul {
 }
 
 .tooltipmap{position:absolute;background:#fffee2;box-shadow:0 1px 3px rgba(85,85,85,0.25);z-index:1000;margin:0;visibility:hidden;opacity:0;text-transform:uppercase;color:#555;font-weight:400;font-size:12px;line-height:1.25;bottom:100%;text-align:center;padding:6px 8px;white-space:nowrap;pointer-events:none;-webkit-transform:translate(-40%,5px);transform:translate(-40%,5px);}
-.tooltipmap:after{content:"";display:block;position:absolute;width:8px;height:8px;background:#fffee2;z-index:2;bottom:0;left:50%;-webkit-transform:translate(-50%,50%) rotate(45deg);transform:translate(-50%,50%) rotate(45deg);border-width:0 1px 1px 0;border-color:transparent #f0f0ed #f0f0ed transparent;border-style:solid}
-.tooltipmap.low{bottom:25%}
-.tooltipmap.low-mid{bottom:50%}
-.tooltipmap.middle{bottom:75%}
-.tooltipmap.top{bottom:100%}
-.tooltipmap.left{left:16%}
-.tooltipmap.right{left:65%}
-.tooltipmap.fire{left:17%}
+.tooltipmap:after{content:"";display:block;position:absolute;width:8px;height:8px;background:rgba(255,255,255,.15);z-index:2;bottom:0;left:50%;-webkit-transform:translate(-50%,50%) rotate(45deg);transform:translate(-50%,50%) rotate(45deg);border-width:0 1px 1px 0;border-color:transparent #f0f0ed #f0f0ed transparent;border-style:solid}
+.tooltipmap.low{bottom:-80%}
+.tooltipmap.low-mid{bottom:-80%}
+.tooltipmap.middle{bottom:-80%}
+.tooltipmap.top{bottom:-80%}
+.tooltipmap.left{left:50%}
+.tooltipmap.right{left:50%}
+.tooltipmap.fire{left:50%}
 .tabs div:hover .tooltipmap{opacity:1;visibility:visible}
 .control-panel ul li:hover
 .tooltipmap{opacity:1;visibility:visible}
@@ -504,7 +504,7 @@ button>svg{
 	overflow: auto;
 	background-color: rgba(0,0,0,.4);
 	padding: 10px;
-	width: 170px;
+	width: 150px;
 	color: #f9f9f9;
 	bottom: 35px;
 	z-index: 999;
@@ -512,7 +512,7 @@ button>svg{
 	right: 13px;
 }
 .map-panel__toggle--panel--legendbox p {
-	font-size: 14px;
+	font-size: 12px;
 	text-align: center;
 }
 
@@ -520,7 +520,7 @@ button>svg{
 	overflow: auto;
   background-color: #f5f5f5;
   padding: 10px;
-  width: 330px;
+  width: 310px;
   margin-left: 5px;
   max-height: calc(100vh - 240px);
 	overflow-x: hidden;
@@ -575,7 +575,7 @@ ul, ol {
 .form-control {
 	background-color: #FFF;
 	background-image: none;
-	font-size: 13px;
+	font-size: 12px;
 	height: 30px;
 	border-radius: 25px;
   outline: none;
@@ -601,7 +601,7 @@ ul, ol {
 	background-color: #FFF;
 	border-radius: 25px;
 	border: 2px solid rgb(247, 145, 29);
-	font-size: 14px;
+	font-size: 12px;
 }
 
 .btn-primary-orange:hover{
@@ -614,7 +614,7 @@ ul, ol {
 	background-color: rgb(247, 145, 29);
 	border-radius: 25px;
 	border: 2px solid rgb(247, 145, 29);
-	font-size: 14px;
+	font-size: 12px;
 }
 
 .btn-primary-blue:hover{
@@ -852,7 +852,7 @@ input:checked + .slider_toggle:before {
     border-bottom: 1px solid #555;
     text-transform: uppercase;
     font-weight: 600;
-    font-size: 15px;
+    font-size: 14px;
     color: #555;
     padding: 5px 0;
 }
@@ -903,4 +903,9 @@ input:checked + .slider_toggle:before {
 
 .shadow {
     box-shadow: 0 1px 2px rgba(85,85,85,0.25);
+}
+
+.leaflet-control-layers-toggle {
+    width: 30px;
+    height: 30px;
 }
